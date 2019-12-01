@@ -26,3 +26,13 @@ fun test() {
     val age = person.age
     val name = person.name
 }
+
+
+data class Person(val name: String, val age: Int)
+
+fun testDataClass(list: List<Person>) {
+    for ((name, age) in list) {
+        print(name)
+        print(age)
+    }
+}

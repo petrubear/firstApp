@@ -1,13 +1,12 @@
 package com.example.firstapp
 
-import android.media.browse.MediaBrowser
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
-
-class MediaItem
+import com.squareup.picasso.Picasso
 
 class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,8 +22,13 @@ class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapt
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: MediaItem) {
 
+        val title = itemView.findViewById<TextView>(R.id.media_title)
+        val image = itemView.findViewById<ImageView>(R.id.image)
+
+        fun bind(item: MediaItem) {
+            title.text = item.title
+            Picasso.with(image.context).load(item.thumbUrl).into(image)
         }
     }
 }
