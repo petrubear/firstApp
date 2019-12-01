@@ -1,17 +1,16 @@
 package com.example.firstapp
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 
 class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater =
-            LayoutInflater.from(parent.context).inflate(R.layout.view_media_item, parent, false)
+        //val inflater =
+        //    LayoutInflater.from(parent.context).inflate(R.layout.view_media_item, parent, false)
+        val inflater = parent.inflate(R.layout.view_media_item)
         return ViewHolder(inflater)
     }
 
@@ -28,7 +27,9 @@ class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapt
 
         fun bind(item: MediaItem) {
             title.text = item.title
-            Picasso.with(image.context).load(item.thumbUrl).into(image)
+            //Picasso.with(image.context).load(item.thumbUrl).into(image)
+            image.loadUrl(item.thumbUrl)
+            toast("Hello from media adapter")
         }
     }
 }
