@@ -28,4 +28,5 @@ atlassian-ide-plugin.private.xml
 atlassian-ide-plugin.xml
 *.MySCMServerInfo
 .svn
+.gradle/
 
