@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 fun Context.toast(message: String, length: Int = Toast.LENGTH_SHORT) {
@@ -26,4 +27,13 @@ fun ViewGroup.inflate(layoutId: Int): View {
 
 fun ImageView.loadUrl(url: String) {
     Picasso.with(context).load(url).into(this)
+}
+
+
+inline fun <reified T : View> View.find(id: Int): T {
+    return findViewById<T>(id)
+}
+
+inline fun <reified T : View> RecyclerView.ViewHolder.find(id: Int): T {
+    return itemView.findViewById<T>(id)
 }
