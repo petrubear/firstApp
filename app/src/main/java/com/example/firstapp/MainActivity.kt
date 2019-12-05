@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), Logger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toast("loaded");
-        toast("reloaded", Toast.LENGTH_LONG);
+        toast("loaded")
+        toast("reloaded", Toast.LENGTH_LONG)
+
+
+        //android kotlin extensions
+        //val recycler = findViewById<RecyclerView>(R.id.recycler)
+        recycler.adapter = MediaAdapter(emptyList())
     }
 
 //    fun toast(message: String) {
