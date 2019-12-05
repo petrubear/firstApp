@@ -2,9 +2,12 @@ package com.example.firstapp
 
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.RenderProcessGoneDetail
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.example.firstapp.MediaItem.MediaType.*
 
 class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,13 +28,20 @@ class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapt
         //val title = itemView.findViewById<TextView>(R.id.media_title)
         val title = itemView.find<TextView>(R.id.media_title)
         //val image = itemView.findViewById<ImageView>(R.id.image)
-        val image = find<ImageView>(R.id.image)
+        val image = find<ImageView>(R.id.media_thumb)
+        val videoIndicator = find<ImageView>(R.id.media_video_indicator)
+
 
         fun bind(item: MediaItem) {
             title.text = item.title
             //Picasso.with(image.context).load(item.thumbUrl).into(image)
             image.loadUrl(item.thumbUrl)
             toast("Hello from media adapter")
+
+            videoIndicator.visibility = when (item.type) {
+                PHOTO -> View.GONE
+                VIDEO -> View.VISIBLE
+            }
         }
     }
 }
