@@ -7,7 +7,13 @@ import com.example.firstapp.MediaItem.MediaType.PHOTO
 import com.example.firstapp.MediaItem.MediaType.VIDEO
 import kotlinx.android.synthetic.main.view_media_item.view.*
 
-class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
+class MediaAdapter(val items: List<MediaItem>, val listener: OnMediaClickListener) :
+    RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
+
+    interface OnMediaClickListener {
+        fun onClick(mediaItem: MediaItem)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //val inflater =
         //    LayoutInflater.from(parent.context).inflate(R.layout.view_media_item, parent, false)
@@ -18,7 +24,9 @@ class MediaAdapter(val items: List<MediaItem>) : RecyclerView.Adapter<MediaAdapt
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        val item = items[position]
+        holder.bind(item)
+        holder.itemView.setOnClickListener { listener.onClick(item) }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
