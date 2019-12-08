@@ -7,7 +7,7 @@ import com.example.firstapp.MediaItem.MediaType.PHOTO
 import com.example.firstapp.MediaItem.MediaType.VIDEO
 import kotlinx.android.synthetic.main.view_media_item.view.*
 
-class MediaAdapter(val items: List<MediaItem>, val listener: OnMediaClickListener) :
+class MediaAdapter(val items: List<MediaItem>, val listener: (MediaItem) -> Unit) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
 
     interface OnMediaClickListener {
@@ -26,7 +26,8 @@ class MediaAdapter(val items: List<MediaItem>, val listener: OnMediaClickListene
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.bind(item)
-        holder.itemView.setOnClickListener { listener.onClick(item) }
+        //holder.itemView.setOnClickListener { listener.onClick(item) }
+        holder.itemView.setOnClickListener { listener(item) }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

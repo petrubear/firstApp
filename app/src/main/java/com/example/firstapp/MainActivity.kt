@@ -17,7 +17,11 @@ class MainActivity : AppCompatActivity(), Logger {
 
         //android kotlin extensions
         //val recycler = findViewById<RecyclerView>(R.id.recycler)
-        recycler.adapter = MediaAdapter(getMedia())
+
+        //recycler.adapter = MediaAdapter(getMedia()) { mediaItem -> toast(mediaItem.title) }
+        //recycler.adapter = MediaAdapter(getMedia()) { toast(it.title) }
+        //recycler.adapter = MediaAdapter(getMedia()) { (title, url) -> toast(title) }
+        recycler.adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
     }
 
 //    fun toast(message: String) {

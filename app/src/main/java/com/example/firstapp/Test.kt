@@ -36,3 +36,40 @@ fun testDataClass(list: List<Person>) {
         print(age)
     }
 }
+
+
+//// lambda
+fun ltest() {
+    val sum = { x: Int, y: Int -> x + y }
+    val mul = { x: Int, y: Int -> x * y }
+    applyOp(3, 5, sum)
+    applyOp(3, 5, mul)
+    applyOp(5, 3) { a, b -> a - b }
+}
+
+fun applyOp(a: Int, b: Int, function: (Int, Int) -> Int): Int {
+    return function(a, b)
+}
+
+
+interface Callback {
+    fun onCallback(result: String)
+}
+
+fun doAsync(x: Int, callback: Callback) {
+    callback.onCallback("finished")
+}
+
+fun doAsyncLambda(x: Int, func: (String) -> Unit) {
+    func("Finished")
+}
+
+fun cbTest() {
+    doAsync(20, object : Callback {
+        override fun onCallback(result: String) {
+            print(result)
+        }
+    })
+
+    doAsyncLambda(20) { h -> print(h) }
+}
