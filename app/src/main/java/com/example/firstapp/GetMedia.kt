@@ -1,6 +1,5 @@
 package com.example.firstapp
 
-private val thumbBase = "http://lorempixel.com/400/400/cats/"
 /*
 fun getMedia() = listOf(
     MediaItem("Title 1", "${thumbBase}1", MediaItem.MediaType.PHOTO),
@@ -25,6 +24,7 @@ fun getMedia(): List<MediaItem> {
 }
  */
 
+/*
 fun getMedia() =
     (1..10).map {
         MediaItem(
@@ -33,3 +33,18 @@ fun getMedia() =
             if (it % 3 == 0) MediaItem.MediaType.PHOTO else MediaItem.MediaType.VIDEO
         )
     }
+
+ */
+
+object MediaLibrary {
+    private const val thumbBase = "http://lorempixel.com/400/400/cats/"
+    val items = (1..10).map {
+        MediaItem(
+            "Title $it",
+            "${thumbBase}$it",
+            if (it % 3 == 0) MediaItem.MediaType.PHOTO else MediaItem.MediaType.VIDEO
+        )
+    }
+}
+
+fun getMedia() = MediaLibrary.items
