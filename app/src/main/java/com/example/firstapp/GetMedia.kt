@@ -1,6 +1,7 @@
 package com.example.firstapp
 
 private val thumbBase = "http://lorempixel.com/400/400/cats/"
+/*
 fun getMedia() = listOf(
     MediaItem("Title 1", "${thumbBase}1", MediaItem.MediaType.PHOTO),
     MediaItem("Title 2", "${thumbBase}2", MediaItem.MediaType.PHOTO),
@@ -13,3 +14,22 @@ fun getMedia() = listOf(
     MediaItem("Title 9", "${thumbBase}9", MediaItem.MediaType.PHOTO),
     MediaItem("Title 10", "${thumbBase}10", MediaItem.MediaType.VIDEO)
 )
+*/
+/*
+fun getMedia(): List<MediaItem> {
+    val mediaItems: MutableList<MediaItem> = mutableListOf()
+    for (i in 1..10) {
+        mediaItems.add(MediaItem("Title ${i})","${thumbBase}${i}", MediaItem.MediaType.PHOTO ))
+    }
+    return mediaItems
+}
+ */
+
+fun getMedia() =
+    (1..10).map {
+        MediaItem(
+            "Title $it",
+            "${thumbBase}$it",
+            if (it % 3 == 0) MediaItem.MediaType.PHOTO else MediaItem.MediaType.VIDEO
+        )
+    }
