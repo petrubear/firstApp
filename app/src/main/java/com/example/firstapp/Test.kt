@@ -100,3 +100,14 @@ fun testInfix() {
     val a = Pair(10, " Ten")
     val b = 10 to "Ten"
 }
+
+
+// nullability
+
+fun testNull() {
+    val myInt: Int? = null
+    val nonNullInt: Int = myInt ?: 0
+
+    val myLong: Long = myInt?.toLong() ?: 0L
+    val forcedLong: Long = myInt!!.toLong()
+}
