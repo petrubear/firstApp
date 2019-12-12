@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
-    val adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
+    val adapter = MediaAdapter() { (title, _) -> toast(title) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), Logger {
         recyclerView.adapter = adapter
         */
         recyclerView.adapter = adapter
+        MediaLibrary.dataAsync { adapter.items = it }
 
         val textView = TextView(this).customApply {
             text = "Hello"
@@ -71,13 +72,22 @@ class MainActivity : AppCompatActivity(), Logger {
             }
         }
          */
-        adapter.items = getMedia().let { media ->
+        /*adapter.items = getMedia().let { media ->
             when (item.itemId) {
                 R.id.filter_all -> media
                 R.id.filter_photos -> media.filter { it.type == MediaItem.MediaType.PHOTO }
                 R.id.filter_videos -> media.filter { it.type == MediaItem.MediaType.VIDEO }
                 else -> emptyList()
             }
+        }*/
+        MediaLibrary.dataAsync { media ->
+            adapter.items =
+                when (item.itemId) {
+                    R.id.filter_all -> media
+                    R.id.filter_photos -> media.filter { it.type == MediaItem.MediaType.PHOTO }
+                    R.id.filter_videos -> media.filter { it.type == MediaItem.MediaType.VIDEO }
+                    else -> emptyList()
+                }
         }
         return true
     }

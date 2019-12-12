@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.view_media_item.view.*
 import kotlin.properties.Delegates
 
 //class MediaAdapter(val listener: (MediaItem) -> Unit) :
-class MediaAdapter(items: List<MediaItem>, val listener: (MediaItem) -> Unit) :
+class MediaAdapter(items: List<MediaItem> = emptyList(), val listener: (MediaItem) -> Unit) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
     //val items: List<MediaItem> by Delegates.observable(emptyList()) { p, old, new -> notifyDataSetChanged() }
     var items: List<MediaItem> by Delegates.observable(items) { _, _, _ -> notifyDataSetChanged() }

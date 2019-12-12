@@ -29,4 +29,5 @@ atlassian-ide-plugin.xml
 *.MySCMServerInfo
 .svn
 .gradle/
+local.properties
 
