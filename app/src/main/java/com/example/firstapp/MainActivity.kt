@@ -12,6 +12,22 @@ import org.jetbrains.anko.startActivity
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
+/*
+sealed class Filter {
+    class AllFilter : Filter() {}
+    class PhotoFilter : Filter() {}
+    class VideoFilter : Filter() {}
+    class EmptyFilter : Filter() {}
+
+}
+ */
+
+sealed class Filter {
+    object None : Filter()
+    class ByType(val type: MediaItem.MediaType) : Filter()
+}
+
+
 class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
@@ -86,6 +102,8 @@ class MainActivity : AppCompatActivity(), Logger {
                 else -> emptyList()
             }
         }*/
+
+        /*
         MediaLibrary.dataAsync { media ->
             adapter.items =
                 when (item.itemId) {
@@ -95,7 +113,52 @@ class MainActivity : AppCompatActivity(), Logger {
                     else -> emptyList()
                 }
         }
+         */
+
+
+        /*val filter: Filter =
+            when (item.itemId) {
+                R.id.filter_all -> Filter.AllFilter()
+                R.id.filter_photos -> Filter.PhotoFilter()
+                R.id.filter_videos -> Filter.VideoFilter()
+                else -> Filter.EmptyFilter()
+            }
+
+         */
+
+        val filter: Filter =
+            when (item.itemId) {
+                R.id.filter_all -> Filter.None
+                R.id.filter_photos -> Filter.ByType(MediaItem.MediaType.PHOTO)
+                R.id.filter_videos -> Filter.ByType(MediaItem.MediaType.VIDEO)
+                else -> Filter.None
+            }
+
+
+
+        loadFilteredData(filter)
         return true
+    }
+
+    private fun loadFilteredData(filter: Filter) {
+        /*
+        MediaLibrary.dataAsync { media ->
+            adapter.items =
+                when (filter) {
+                    is Filter.AllFilter -> media
+                    is Filter.PhotoFilter -> media.filter { it.type == MediaItem.MediaType.PHOTO }
+                    is Filter.VideoFilter -> media.filter { it.type == MediaItem.MediaType.VIDEO }
+                    else -> emptyList()
+                }
+        }
+         */
+        MediaLibrary.dataAsync { media ->
+            adapter.items =
+                when (filter) {
+                    is Filter.None -> media
+                    is Filter.ByType -> media.filter { it.type == filter.type }
+                }
+        }
     }
     //    fun toast(message: String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
