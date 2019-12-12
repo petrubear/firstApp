@@ -5,9 +5,13 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.recyclerview.widget.RecyclerView
+
+//import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), Logger {
+
+    val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +26,13 @@ class MainActivity : AppCompatActivity(), Logger {
         //recycler.adapter = MediaAdapter(getMedia()) { mediaItem -> toast(mediaItem.title) }
         //recycler.adapter = MediaAdapter(getMedia()) { toast(it.title) }
         //recycler.adapter = MediaAdapter(getMedia()) { (title, url) -> toast(title) }
-        recycler.adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
+        //recycler.adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
+        /*
+        val adapter = MediaAdapter() { (title, _) -> toast(title) }
+        adapter.items = getMedia()
+        recyclerView.adapter = adapter
+        */
+        recyclerView.adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
 
         val textView = TextView(this).customApply {
             text = "Hello"
@@ -30,7 +40,7 @@ class MainActivity : AppCompatActivity(), Logger {
         }
     }
 
-    fun <T> T.customApply (f: T.() -> Unit):T {
+    fun <T> T.customApply(f: T.() -> Unit): T {
         this.f()
         return this
     }
