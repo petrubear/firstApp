@@ -73,3 +73,18 @@ fun cbTest() {
 
     doAsyncLambda(20) { h -> print(h) }
 }
+
+
+/// Collections
+
+fun testCollection(items: List<MediaItem>) {
+    //val photos = items.filter { item -> item.type == MediaItem.MediaType.PHOTO }.sortedBy { item -> item.title }
+
+    // esta lista es inmutable
+    val photoUrls: List<String> = items
+        .filter { it.type == MediaItem.MediaType.PHOTO }
+        .sortedBy { it.title }
+        .map { it.thumbUrl }
+
+    val mutableList = mutableListOf<Int>(1, 2, 3, 4)
+}

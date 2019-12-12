@@ -2,6 +2,8 @@ package com.example.firstapp
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
+    val adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity(), Logger {
         adapter.items = getMedia()
         recyclerView.adapter = adapter
         */
-        recyclerView.adapter = MediaAdapter(getMedia()) { (title, _) -> toast(title) }
+        recyclerView.adapter = adapter
 
         val textView = TextView(this).customApply {
             text = "Hello"
@@ -45,7 +48,40 @@ class MainActivity : AppCompatActivity(), Logger {
         return this
     }
 
-//    fun toast(message: String) {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        /*
+        when (item.title) {
+            "Videos" -> {
+                adapter.items = getMedia().filter { it.type == MediaItem.MediaType.VIDEO }
+                return true
+            }
+            "Photos" -> {
+                adapter.items = getMedia().filter { it.type == MediaItem.MediaType.PHOTO }
+                return true
+            }
+            else -> {
+                adapter.items = getMedia()
+                return true
+            }
+        }
+         */
+        adapter.items = getMedia().let { media ->
+            when (item.itemId) {
+                R.id.filter_all -> media
+                R.id.filter_photos -> media.filter { it.type == MediaItem.MediaType.PHOTO }
+                R.id.filter_videos -> media.filter { it.type == MediaItem.MediaType.VIDEO }
+                else -> emptyList()
+            }
+        }
+        return true
+    }
+    //    fun toast(message: String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 //        d("Hello")
 //    }
