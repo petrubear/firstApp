@@ -8,13 +8,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import org.jetbrains.anko.startActivity
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
-    val adapter = MediaAdapter() { (title, _) -> toast(title) }
+    //val adapter = MediaAdapter() { (title, _) -> toast(title) }
+    val adapter = MediaAdapter() { navigateToDetail(it) }
+
+    private fun navigateToDetail(item: MediaItem) {
+        startActivity<DetailActivity>(Pair(DetailActivity.ID, item.id))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
