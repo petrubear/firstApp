@@ -8,8 +8,11 @@ import com.example.firstapp.MediaItem.MediaType.VIDEO
 import kotlinx.android.synthetic.main.view_media_item.view.*
 import kotlin.properties.Delegates
 
+
+typealias Listener = (MediaItem) -> Unit
+
 //class MediaAdapter(val listener: (MediaItem) -> Unit) :
-class MediaAdapter(items: List<MediaItem> = emptyList(), val listener: (MediaItem) -> Unit) :
+class MediaAdapter(items: List<MediaItem> = emptyList(), val listener: Listener) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
     //val items: List<MediaItem> by Delegates.observable(emptyList()) { p, old, new -> notifyDataSetChanged() }
     var items: List<MediaItem> by Delegates.observable(items) { _, _, _ -> notifyDataSetChanged() }
