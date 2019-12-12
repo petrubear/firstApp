@@ -88,3 +88,15 @@ fun testCollection(items: List<MediaItem>) {
 
     val mutableList = mutableListOf<Int>(1, 2, 3, 4)
 }
+
+// infix functions
+
+infix fun Int.addition(other: Int) = this + other
+
+fun testInfix() {
+    val x = 9.addition(7)
+    val z = 9 addition 8
+
+    val a = Pair(10, " Ten")
+    val b = 10 to "Ten"
+}
