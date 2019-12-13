@@ -14,22 +14,6 @@ import kotlin.system.measureTimeMillis
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
-/*
-sealed class Filter {
-    class AllFilter : Filter() {}
-    class PhotoFilter : Filter() {}
-    class VideoFilter : Filter() {}
-    class EmptyFilter : Filter() {}
-
-}
- */
-
-sealed class Filter {
-    object None : Filter()
-    class ByType(val type: MediaItem.MediaType) : Filter()
-}
-
-
 class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
