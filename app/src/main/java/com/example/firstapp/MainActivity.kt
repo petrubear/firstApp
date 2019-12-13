@@ -10,15 +10,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivity
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
 import kotlin.system.measureTimeMillis
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), Logger {
+class MainActivity : AppCompatActivity(), Logger, CoroutineScope {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
     //val adapter = MediaAdapter() { (title, _) -> toast(title) }
     val adapter = MediaAdapter { navigateToDetail(it) }
+
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private fun navigateToDetail(item: MediaItem) {
         startActivity<DetailActivity>(Pair(DetailActivity.ID, item.id))
@@ -26,6 +33,7 @@ class MainActivity : AppCompatActivity(), Logger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        job = Job()
         setContentView(R.layout.activity_main)
         toast("loaded")
         toast("reloaded", Toast.LENGTH_LONG)
@@ -148,7 +156,8 @@ class MainActivity : AppCompatActivity(), Logger {
                 updateDate(filter, media1 + media2)
             }
         }*/
-        GlobalScope.launch(Dispatchers.Main) {
+        //GlobalScope.launch(Dispatchers.Main) {
+        launch {
             //val media1 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cats") }
             //val media2 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cars") }
 
@@ -158,6 +167,7 @@ class MainActivity : AppCompatActivity(), Logger {
 
             val media1 = async(Dispatchers.IO) { MediaLibrary.dataSync("cats") }
             val media2 = async(Dispatchers.IO) { MediaLibrary.dataSync("cars") }
+            val media3 = useAsync()
             updateDate(filter, media1.await() + media2.await())
 
         }
@@ -165,6 +175,13 @@ class MainActivity : AppCompatActivity(), Logger {
 
     private suspend fun getData(type: String): List<MediaItem> = withContext(Dispatchers.IO) {
         MediaLibrary.dataSync(type)
+    }
+
+
+    private suspend fun useAsync(): List<MediaItem> = suspendCancellableCoroutine{continuation ->
+        MediaLibrary.dataAsync { media ->
+            continuation.resume(media)
+        }
     }
 
     private fun updateDate(
@@ -177,10 +194,17 @@ class MainActivity : AppCompatActivity(), Logger {
                 is Filter.ByType -> media.filter { it.type == filter.type }
             }
     }
+
+
     //    fun toast(message: String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 //        d("Hello")
 //    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
 
 }
 
