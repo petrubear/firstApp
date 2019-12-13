@@ -8,6 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.startActivity
 
 //import kotlinx.android.synthetic.main.activity_main.*
@@ -32,7 +36,7 @@ class MainActivity : AppCompatActivity(), Logger {
 
     val recyclerView: RecyclerView by lazy { findViewById<RecyclerView>(R.id.recycler) }
     //val adapter = MediaAdapter() { (title, _) -> toast(title) }
-    val adapter = MediaAdapter() { navigateToDetail(it) }
+    val adapter = MediaAdapter { navigateToDetail(it) }
 
     private fun navigateToDetail(item: MediaItem) {
         startActivity<DetailActivity>(Pair(DetailActivity.ID, item.id))
@@ -152,13 +156,36 @@ class MainActivity : AppCompatActivity(), Logger {
                 }
         }
          */
-        MediaLibrary.dataAsync { media ->
-            adapter.items =
-                when (filter) {
-                    is Filter.None -> media
-                    is Filter.ByType -> media.filter { it.type == filter.type }
-                }
+        //progress.show()
+        /*
+        MediaLibrary.dataAsync("cats") { media1 ->
+            MediaLibrary.dataAsync("cars") { media2 ->
+                updateDate(filter, media1 + media2)
+            }
+        }*/
+        GlobalScope.launch(Dispatchers.Main) {
+            //val media1 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cats") }
+            //val media2 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cars") }
+            val media1 = getData("cats")
+            val media2 = getData("cars ")
+            updateDate(filter, media1 + media2)
+
         }
+    }
+
+    private suspend fun getData(type: String): List<MediaItem> = withContext(Dispatchers.IO) {
+        MediaLibrary.dataSync(type)
+    }
+
+    private fun updateDate(
+        filter: Filter,
+        media: List<MediaItem>
+    ) {
+        adapter.items =
+            when (filter) {
+                is Filter.None -> media
+                is Filter.ByType -> media.filter { it.type == filter.type }
+            }
     }
     //    fun toast(message: String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
