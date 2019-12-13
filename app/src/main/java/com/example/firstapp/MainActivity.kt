@@ -8,11 +8,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.jetbrains.anko.startActivity
+import kotlin.system.measureTimeMillis
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
@@ -139,8 +137,11 @@ class MainActivity : AppCompatActivity(), Logger {
             }
 
 
+        val timeMillis = measureTimeMillis {
+            loadFilteredData(filter)
+        }
 
-        loadFilteredData(filter)
+        print("===> time: $timeMillis")
         return true
     }
 
@@ -166,9 +167,14 @@ class MainActivity : AppCompatActivity(), Logger {
         GlobalScope.launch(Dispatchers.Main) {
             //val media1 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cats") }
             //val media2 = withContext(Dispatchers.IO) { MediaLibrary.dataSync("cars") }
-            val media1 = getData("cats")
-            val media2 = getData("cars ")
-            updateDate(filter, media1 + media2)
+
+            //val media1 = getData("cats")
+            //val media2 = getData("cars ")
+            //updateDate(filter, media1 + media2)
+
+            val media1 = async(Dispatchers.IO) { MediaLibrary.dataSync("cats") }
+            val media2 = async(Dispatchers.IO) { MediaLibrary.dataSync("cars") }
+            updateDate(filter, media1.await() + media2.await())
 
         }
     }
